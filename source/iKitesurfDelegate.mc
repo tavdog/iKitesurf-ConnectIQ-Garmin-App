@@ -38,6 +38,12 @@ class iKitesurfDelegate extends Ui.BehaviorDelegate {
         if(App.getApp().getProperty("password").length()==0 && testPassword.length()>0) {
         	App.getApp().setProperty("password",testPassword);
         } 
+        if(App.getApp().getProperty("units_wind").length()==0 && units_wind.length()>0) {
+        	App.getApp().setProperty("units_wind",units_wind);
+        } 
+        if(App.getApp().getProperty("units_temp").length()==0 && units_temp.length()>0) {
+        	App.getApp().setProperty("units_temp",units_temp);
+        } 
  		
  		//System.println("Auth successful: "+App.getApp().getProperty("authSuccessful").toString());
  		//System.println("wf_token: "+App.getApp().getProperty("apiToken"));
@@ -135,9 +141,22 @@ class iKitesurfDelegate extends Ui.BehaviorDelegate {
     		// Only show requesting wind data message initially, we don't want it to show up on periodic polling
     		parentView.renderUiWithData("Requesting wind data");
     	}
+
+		// defaults are kts and C
+		var units_wind = "kts";
+		var units_temp = "c";
+		if (App.getApp().getProperty("units_wind").length() > 0) {
+			units_wind = App.getApp().getProperty("units_wind");
+		}
+		
+		if (App.getApp().getProperty("units_temp").length()>0 ) {
+			units_temp = App.getApp().getProperty("units_temp");
+		}
         
         var apiToken = App.getApp().getProperty("apiToken");
-        var url = "https://api.weatherflow.com/wxengine/rest/spot/getSpotSetByList?format=json&v=1.3&wf_apikey="+apiKey+"&wf_token="+apiToken+"&uid=356696656686243&profile_id=278808&spot_list="+spotList+"&page=1&units_wind=kts&units_temp=C&units_distance=km&device_id=356696656686243&device_type=Android&device_os=6.0.1&wa_ver=2.5&activity=Kite&spot_types=1,100,101&";
+		// var url = "https://api.weatherflow.com/wxengine/rest/spot/getSpotSetByList?format=json&v=1.3&wf_apikey="+apiKey+"&wf_token="+apiToken+"&uid=356696656686243&profile_id=278808&spot_list="+spotList+"&page=1&units_wind=kts&units_temp=C&units_distance=km&device_id=356696656686243&device_type=Android&device_os=6.0.1&wa_ver=2.5&activity=Kite&spot_types=1,100,101&";
+        var url = "https://api.weatherflow.com/wxengine/rest/spot/getSpotSetByList?format=json&v=1.3&wf_apikey="+apiKey+"wf_token="+apiToken+"&uid=356696656686243&profile_id=278808&spot_list="+spotList+"&page=1&units_wind=" +units_wind+ "&units_temp="+units_temp+"&units_distance=km&device_id=356696656686243&device_type=Android&device_os=6.0.1&wa_ver=2.5&activity=Kite&spot_types=1,100,101&";
+
 		System.println("URL: " + url);
         Comm.makeWebRequest(
            url,
